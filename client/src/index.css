@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap");
+
+body {
+  background-color: #1f1f2f;
+  color: #fff;
+  font-family: "Happy Monkey", serif;
+}
+
+.circle-won {
+  background-color: rgb(63, 167, 240);
+}
+
+.cross-won {
+  background-color: #dd7f9f;
+}
+
+.draw-won {
+  background-color: #dd7f9f;
+}

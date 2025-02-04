@@ -1,108 +1,119 @@
-import { useState } from "react";
 import Square from "../components/Square";
+import { useEffect, useState } from "react";
 
-function Board({ xIsNext, squares, onPlay }) {
-  function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    const nextSquares = squares.slice();
-    if (xIsNext) {
-      nextSquares[i] = "X";
-    } else {
-      nextSquares[i] = "O";
-    }
-    onPlay(nextSquares);
-  }
+const renderFrom = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
 
-  const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = "Pemenang: " + winner;
-  } else {
-    status = "Pemain selanjutnya: " + (xIsNext ? "X" : "O");
+export default function TicTacToe() {
+  const [gameState, setGameState] = useState(renderFrom);
+  const [currentPlayer, setCurrentPlayer] = useState("circle");
+  const [finishedState, setFinishedState] = useState(false);
+  const [finishedArrayState, setFinishedArrayState] = useState([]);
+  const [playOnline, setPlayOnline] = useState(false);
+
+  const checkWinner = () => {
+    // row
+    for (let row = 0; row < gameState.length; row++) {
+      if (gameState[row][0] === gameState[row][1] && gameState[row][1] === gameState[row][2]) {
+        setFinishedArrayState([row * 3 + 0, row * 3 + 1, row * 3 + 2]);
+
+        return gameState[row][0];
+      }
+    }
+
+    // column
+    for (let col = 0; col < gameState.length; col++) {
+      if (gameState[0][col] === gameState[1][col] && gameState[1][col] === gameState[2][col]) {
+        setFinishedArrayState([0 * 3 + col, 1 * 3 + col, 2 * 3 + col]);
+        return gameState[0][col];
+      }
+    }
+
+    if (gameState[0][0] === gameState[1][1] && gameState[1][1] === gameState[2][2]) {
+      return gameState[0][0];
+    }
+
+    if (gameState[0][2] === gameState[1][1] && gameState[1][1] === gameState[2][0]) {
+      return gameState[0][2];
+    }
+
+    const isDrawMatch = gameState.flat().every((e) => {
+      if (e === "circle" || e === "cross") return true;
+    });
+
+    // console.log(isDrawMatch);
+
+    if (isDrawMatch) return "draw";
+
+    return null;
+  };
+
+  useEffect(() => {
+    const winner = checkWinner();
+    if (winner) {
+      setFinishedState(winner);
+    }
+  }, [gameState]);
+
+  if (!playOnline) {
+    return (
+      <>
+        <div className="h-screen flex justify-center items-center">
+          <button className="bg-green-500 px-5 text-lg font-bold cursor-pointer hover:bg-green-600 py-3 rounded-sm">Play Online</button>
+        </div>
+      </>
+    );
   }
 
   return (
     <>
-      <div className="status">{status}</div>
-      <div className="board-row">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+          {/* Game Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-center p-4 bg-blue-300 rounded-lg flex-1 mr-4">
+              <h2 className="font-bold text-lg text-blue-800">Yourself</h2>
+              <p className="text-blue-600">Player O</p>
+            </div>
+            <div className="text-center p-4 bg-red-300 rounded-lg flex-1">
+              <h2 className="font-bold text-lg text-red-800">Opponent</h2>
+              <p className="text-red-600">Player X</p>
+            </div>
+          </div>
+
+          {/* Game Board */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Tic Tac Toe</h1>
+            <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto">
+              {gameState.map((arr, rowIndex) =>
+                arr.map((e, colIndex) => {
+                  return (
+                    <Square
+                      key={rowIndex * 3 + colIndex}
+                      setGameState={setGameState}
+                      id={rowIndex * 3 + colIndex}
+                      currentPlayer={currentPlayer}
+                      setCurrentPlayer={setCurrentPlayer}
+                      finishedState={finishedState}
+                      finishedArrayState={finishedArrayState}
+                    />
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Game Status */}
+          <div className="text-center">
+            <div className="text-lg font-semibold text-gray-700">Current Turn: Player X</div>
+            {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700 mt-4">{finishedState} won the game</div>}
+            {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700 mt-4">Its a Draw</div>}
+          </div>
+        </div>
       </div>
     </>
   );
-}
-
-export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove] = useState(0);
-  const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
-
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length - 1);
-  }
-
-  function jumpTo(nextMove) {
-    setCurrentMove(nextMove);
-  }
-
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = "Pergi ke langkah #" + move;
-    } else {
-      description = "Pergi ke awal permainan";
-    }
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
-  });
-
-  return (
-    <div className="game">
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
-      <div className="game-info">
-        <ol>{moves}</ol>
-      </div>
-    </div>
-  );
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
 }
