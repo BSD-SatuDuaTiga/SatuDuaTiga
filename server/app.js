@@ -12,26 +12,34 @@ const io = new Server(httpServer, {
   },
 });
 
-const users = [];
+const users = {};
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 io.on("connection", (socket) => {
-  // ...
   // console.log("New user joined socket " + socket.id);
-  users.push({
+
+  users[socket.id] = {
     socket: socket,
     online: true,
+  };
+
+  socket.on("request_to_play", (data) => {
+    // console.log(data, "ckck");
+
+    const currentUser = users[socket.id];
+    currentUser.playerName = data.playerName;
+
+    // console.log(currentUser, "cucu");
   });
 
   socket.on("disconnect", () => {
-    for (let i = 0; i < users.length; i++) {
-      if (users[i] === socket.id) {
-        users.online = false;
-      }
-    }
+    users[socket.id] = {
+      socket: { ...socket, online: false },
+      online: true,
+    };
   });
 });
 

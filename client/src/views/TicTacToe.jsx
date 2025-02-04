@@ -16,6 +16,8 @@ export default function TicTacToe() {
   const [finishedArrayState, setFinishedArrayState] = useState([]);
   const [playOnline, setPlayOnline] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [playerName, setPlayerName] = useState("");
+  const [opponentName, setOpponentName] = useState("");
 
   const checkWinner = () => {
     // row
@@ -76,23 +78,27 @@ export default function TicTacToe() {
     return result;
   };
 
-  socket?.on("connect", () => {
+  socket?.on("connect", function () {
     setPlayOnline(true);
   });
 
   async function handlePlayOnline() {
     const result = await takePlayerName();
-    console.log(result);
+    // console.log(result);
 
     if (!result.isConfirmed) {
       return;
     }
 
-    const userName = result.value;
-    setPlayOnline(userName);
+    const username = result.value;
+    setPlayerName(username);
 
     const newSocket = io("http://localhost:3000", {
       autoConnect: true,
+    });
+
+    newSocket?.emit("request_to_play", {
+      playerName: username,
     });
 
     setSocket(newSocket);
@@ -105,6 +111,16 @@ export default function TicTacToe() {
           <button onClick={handlePlayOnline} className="bg-green-500 px-5 text-lg font-bold cursor-pointer hover:bg-green-600 py-3 rounded-sm">
             Play Online
           </button>
+        </div>
+      </>
+    );
+  }
+
+  if (playOnline && !opponentName) {
+    return (
+      <>
+        <div className="h-screen flex justify-center items-center">
+          <div className="text-lg font-semibold text-gray-700">Waiting for opponent...</div>
         </div>
       </>
     );
