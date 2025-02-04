@@ -22,10 +22,13 @@ const crossSvg = (
   </svg>
 );
 
-export default function Square({ setGameState, id, currentPlayer, setCurrentPlayer, setFinishedState, finishedState, finishedArrayState }) {
+export default function Square({ currentElement, playingAs, socket, setGameState, id, currentPlayer, setCurrentPlayer, finishedState, finishedArrayState }) {
   const [icon, setIcon] = useState(null);
 
   const clickOnSquare = () => {
+    if (currentPlayer !== playingAs) {
+      return;
+    }
     if (finishedState) {
       return;
     }
@@ -39,7 +42,15 @@ export default function Square({ setGameState, id, currentPlayer, setCurrentPlay
 
       const myCurrentPlayer = currentPlayer;
 
+      socket.emit("playerMoveFromClient", {
+        state: {
+          id,
+          sign: myCurrentPlayer,
+        },
+      });
+
       setCurrentPlayer(currentPlayer === "circle" ? "cross" : "circle");
+
       setGameState((prevState) => {
         let newState = [...prevState];
         const rowIndex = Math.floor(id / 3);
@@ -55,11 +66,11 @@ export default function Square({ setGameState, id, currentPlayer, setCurrentPlay
     <>
       <div
         onClick={clickOnSquare}
-        className={`w-20 h-20 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : "cursor-pointer"} ${
-          finishedArrayState.includes(id) ? finishedState + "-won" : ""
-        }`}
+        className={`w-20 h-20 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
+          currentPlayer !== playingAs ? "cursor-not-allowed" : ""
+        } ${finishedArrayState.includes(id) ? finishedState + "-won" : ""} ${finishedState && finishedState !== playingAs ? "bg-grey-400" : ""}`}
       >
-        {icon}
+        {currentElement === "circle" ? circleSvg : currentElement === "cross" ? crossSvg : icon}
       </div>
     </>
   );

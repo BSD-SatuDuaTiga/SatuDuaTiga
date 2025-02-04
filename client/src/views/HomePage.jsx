@@ -7,18 +7,18 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex flex-col items-center justify-center text-white relative overflow-hidden">
       {/* Navbar */}
       <nav className="bg-black/30 backdrop-blur-sm p-6 w-full fixed top-0 flex justify-center shadow-lg z-50">
-        <div className="flex items-center space-x-12 max-w-4xl w-full px-4">
+        <div className="flex justify-center items-center space-x-12 max-w-4xl w-full px-4">
           <h1 className="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-yellow-200 to-yellow-500 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-pointer">SatuDuaTiga</h1>
-          <div className="flex space-x-8 ml-auto text-lg">
-            <a href="#" className="relative group">
+          {/* <div className="flex space-x-8 ml-auto text-lg"> */}
+          {/* <a href="#" className="relative group">
               <span className="text-white/90 hover:text-white transition-colors">Home</span>
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <a href="#" className="relative group">
+            </a> */}
+          {/* <a href="#" className="relative group">
               <span className="text-white/90 hover:text-white transition-colors">Login</span>
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-            </a>
-          </div>
+            </a> */}
+          {/* </div> */}
         </div>
       </nav>
 

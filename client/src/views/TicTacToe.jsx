@@ -18,6 +18,7 @@ export default function TicTacToe() {
   const [socket, setSocket] = useState(null);
   const [playerName, setPlayerName] = useState("");
   const [opponentName, setOpponentName] = useState("");
+  const [playingAs, setPlayingAs] = useState(null);
 
   const checkWinner = () => {
     // row
@@ -78,6 +79,22 @@ export default function TicTacToe() {
     return result;
   };
 
+  socket?.on("playerMoveFromServer", function (data) {
+    // console.log("Got data from server");
+    // setCurrentPlayer(data.state.currentPlayer);
+
+    const id = data.state.id;
+    setGameState((prevState) => {
+      let newState = [...prevState];
+      const rowIndex = Math.floor(id / 3);
+      const colIndex = id % 3;
+      newState[rowIndex][colIndex] = data.state.sign;
+
+      return newState;
+    });
+    setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
+  });
+
   socket?.on("connect", function () {
     setPlayOnline(true);
   });
@@ -87,8 +104,9 @@ export default function TicTacToe() {
   });
 
   socket?.on("OpponentFound", function (data) {
-    console.log(data);
+    // console.log(data);
 
+    setPlayingAs(data.playingAs);
     setOpponentName(data.opponentName);
   });
 
@@ -142,14 +160,8 @@ export default function TicTacToe() {
         <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md w-full">
           {/* Game Header */}
           <div className="flex justify-between items-center mb-8">
-            <div className="text-center p-4 bg-blue-300 rounded-lg flex-1 mr-4">
-              <h2 className="font-bold text-lg text-blue-800">Yourself</h2>
-              <p className="text-blue-600">Player O</p>
-            </div>
-            <div className="text-center p-4 bg-red-300 rounded-lg flex-1">
-              <h2 className="font-bold text-lg text-red-800">Opponent</h2>
-              <p className="text-red-600">Player X</p>
-            </div>
+            <div className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""}`}>{playerName}</div>
+            <div className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""}`}>{opponentName}</div>
           </div>
 
           {/* Game Board */}
@@ -161,12 +173,16 @@ export default function TicTacToe() {
                   return (
                     <Square
                       key={rowIndex * 3 + colIndex}
+                      socket={socket}
+                      gameState={gameState}
                       setGameState={setGameState}
                       id={rowIndex * 3 + colIndex}
                       currentPlayer={currentPlayer}
                       setCurrentPlayer={setCurrentPlayer}
                       finishedState={finishedState}
                       finishedArrayState={finishedArrayState}
+                      currentElement={e}
+                      playingAs={playingAs}
                     />
                   );
                 })
@@ -176,9 +192,10 @@ export default function TicTacToe() {
 
           {/* Game Status */}
           <div className="text-center">
-            <div className="text-lg font-semibold text-gray-700">Current Turn: Player X</div>
-            {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700 mt-4">{finishedState} won the game</div>}
+            {/* {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Current Turn: Player X</div>} */}
+            {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700 mt-4">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
             {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700 mt-4">Its a Draw</div>}
+            {!finishedState && opponentName && <div className="text-lg font-semibold text-green-700 mt-4">You are playing against {opponentName} </div>}
           </div>
         </div>
       </div>

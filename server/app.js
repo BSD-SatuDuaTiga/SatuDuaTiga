@@ -14,10 +14,6 @@ const io = new Server(httpServer, {
 
 const users = {};
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 io.on("connection", (socket) => {
   // console.log("New user joined socket " + socket.id);
 
@@ -45,12 +41,28 @@ io.on("connection", (socket) => {
     // console.log(opponentPlayer, "opponentPlayer");
 
     if (opponentPlayer) {
-      opponentPlayer.socket.emit("OpponentFound", {
-        opponentName: currentUser.playerName,
-      });
-
       currentUser.socket.emit("OpponentFound", {
         opponentName: opponentPlayer.playerName,
+        playingAs: "circle",
+      });
+
+      opponentPlayer.socket.emit("OpponentFound", {
+        opponentName: currentUser.playerName,
+        playingAs: "cross",
+      });
+
+      currentUser.socket.on("playerMoveFromClient", (data) => {
+        // console.log(data, "data");
+        opponentPlayer.socket.emit("playerMoveFromServer", {
+          ...data,
+        });
+      });
+
+      opponentPlayer.socket.on("playerMoveFromClient", (data) => {
+        // console.log(data, "data");
+        currentUser.socket.emit("playerMoveFromServer", {
+          ...data,
+        });
       });
     } else {
       currentUser.socket.emit("OpponentNotFound");
