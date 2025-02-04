@@ -82,6 +82,16 @@ export default function TicTacToe() {
     setPlayOnline(true);
   });
 
+  socket?.on("OpponentNotFound", function () {
+    setOpponentName(false);
+  });
+
+  socket?.on("OpponentFound", function (data) {
+    console.log(data);
+
+    setOpponentName(data.opponentName);
+  });
+
   async function handlePlayOnline() {
     const result = await takePlayerName();
     // console.log(result);
@@ -120,7 +130,7 @@ export default function TicTacToe() {
     return (
       <>
         <div className="h-screen flex justify-center items-center">
-          <div className="text-lg font-semibold text-gray-700">Waiting for opponent...</div>
+          <div className="text-xl font-bold text-white">Waiting for opponent . . . .</div>
         </div>
       </>
     );

@@ -31,8 +31,30 @@ io.on("connection", (socket) => {
 
     const currentUser = users[socket.id];
     currentUser.playerName = data.playerName;
-
     // console.log(currentUser, "cucu");
+
+    let opponentPlayer;
+
+    for (const key in users) {
+      const user = users[key];
+      if (user.online && !user.playing && socket.id !== key) {
+        opponentPlayer = user;
+        break;
+      }
+    }
+    // console.log(opponentPlayer, "opponentPlayer");
+
+    if (opponentPlayer) {
+      opponentPlayer.socket.emit("OpponentFound", {
+        opponentName: currentUser.playerName,
+      });
+
+      currentUser.socket.emit("OpponentFound", {
+        opponentName: opponentPlayer.playerName,
+      });
+    } else {
+      currentUser.socket.emit("OpponentNotFound");
+    }
   });
 
   socket.on("disconnect", () => {
