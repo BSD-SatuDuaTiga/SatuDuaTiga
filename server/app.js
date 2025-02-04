@@ -58,10 +58,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    users[socket.id] = {
-      socket: { ...socket, online: false },
-      online: true,
-    };
+    const currentUser = users[socket.id];
+    currentUser.online = false;
   });
 });
 
