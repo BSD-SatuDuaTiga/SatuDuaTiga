@@ -12,12 +12,27 @@ const io = new Server(httpServer, {
   },
 });
 
+const users = [];
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 io.on("connection", (socket) => {
   // ...
+  // console.log("New user joined socket " + socket.id);
+  users.push({
+    socket: socket,
+    online: true,
+  });
+
+  socket.on("disconnect", () => {
+    for (let i = 0; i < users.length; i++) {
+      if (users[i] === socket.id) {
+        users.online = false;
+      }
+    }
+  });
 });
 
 httpServer.listen(port, () => {

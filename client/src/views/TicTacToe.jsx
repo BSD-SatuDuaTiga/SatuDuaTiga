@@ -1,5 +1,7 @@
 import Square from "../components/Square";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import Swal from "sweetalert2";
 
 const renderFrom = [
   [1, 2, 3],
@@ -13,6 +15,7 @@ export default function TicTacToe() {
   const [finishedState, setFinishedState] = useState(false);
   const [finishedArrayState, setFinishedArrayState] = useState([]);
   const [playOnline, setPlayOnline] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   const checkWinner = () => {
     // row
@@ -58,11 +61,50 @@ export default function TicTacToe() {
     }
   }, [gameState]);
 
+  const takePlayerName = async () => {
+    const result = await Swal.fire({
+      title: "Enter your name",
+      input: "text",
+      inputLabel: "name",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return "You need to write something!";
+        }
+      },
+    });
+    return result;
+  };
+
+  socket?.on("connect", () => {
+    setPlayOnline(true);
+  });
+
+  async function handlePlayOnline() {
+    const result = await takePlayerName();
+    console.log(result);
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    const userName = result.value;
+    setPlayOnline(userName);
+
+    const newSocket = io("http://localhost:3000", {
+      autoConnect: true,
+    });
+
+    setSocket(newSocket);
+  }
+
   if (!playOnline) {
     return (
       <>
         <div className="h-screen flex justify-center items-center">
-          <button className="bg-green-500 px-5 text-lg font-bold cursor-pointer hover:bg-green-600 py-3 rounded-sm">Play Online</button>
+          <button onClick={handlePlayOnline} className="bg-green-500 px-5 text-lg font-bold cursor-pointer hover:bg-green-600 py-3 rounded-sm">
+            Play Online
+          </button>
         </div>
       </>
     );
@@ -70,8 +112,8 @@ export default function TicTacToe() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+      <div className="min-h-screen bg[#1f1f2f] flex justify-center items-center p-4">
+        <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md w-full">
           {/* Game Header */}
           <div className="flex justify-between items-center mb-8">
             <div className="text-center p-4 bg-blue-300 rounded-lg flex-1 mr-4">
