@@ -1,68 +1,43 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap");
 
 body {
-  margin: 0;
+  background-color: #1f1f2f;
+  color: #fff;
+  font-family: "Happy Monkey", serif;
+}
+
+.left,
+.right {
+  height: 30px;
+  width: 120px;
+  background-color: red;
+  border-bottom-left-radius: 50px;
+  background-color: #4b495f;
+  border-top-right-radius: 50px;
+  padding-top: 7px;
+  font-size: 18px;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.move-detection {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px;
+}
+.circle-won {
+  background-color: #3fa7f0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.cross-won {
+  background-color: #dd7f9f;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.current-move-cirlce {
+  background-color: #dd7f9f !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.current-move-cross {
+  background-color: #3fa7f0 !important;
 }
