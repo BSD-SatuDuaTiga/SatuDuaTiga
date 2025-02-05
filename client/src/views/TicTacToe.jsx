@@ -190,6 +190,9 @@ export default function TicTacToe() {
           <button onClick={handlePlayOnline} className="bg-green-500 px-5 text-lg font-bold cursor-pointer hover:bg-green-600 py-3 rounded-sm">
             Play Online
           </button>
+          <button onClick={() => navigate("/")} className="bg-gray-500 ml-3 px-5 text-lg font-bold cursor-pointer hover:bg-gray-600 py-3 rounded-sm">
+            Back
+          </button>
         </div>
       </>
     );
