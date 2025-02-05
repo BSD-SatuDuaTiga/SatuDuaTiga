@@ -209,96 +209,95 @@ export default function TicTacToe() {
   }
 
   return (
-    <>
-      <div className="min-h-screen bg-[#1f1f2f] flex justify-center items-center p-4">
-        <div className="flex gap-8">
-          {/* Game Section */}
-          <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md">
-            {/* Game Header */}
-            <div className="flex justify-between items-center mb-8">
-              <div className={`left px-4 py-2 rounded-lg flex items-center gap-2 ${playingAs === "circle" ? "bg-blue-600 text-white ring-2 ring-yellow-400" : "bg-blue-400 text-white"}`}>
-                {playerName}
-                {playingAs === "circle" && <span className="text-sm font-bold">(O)</span>}
-                {playingAs === "cross" && <span className="text-sm font-bold">(X)</span>}
-              </div>
-
-              <div className={`right px-4 py-2 rounded-lg flex items-center gap-2 ${playingAs === "cross" ? "bg-red-600 text-white ring-2 ring-yellow-400" : "bg-red-400 text-white"}`}>
-                {opponentName}
-                {playingAs !== "circle" && <span className="text-sm font-bold">(O)</span>}
-                {playingAs !== "cross" && <span className="text-sm font-bold">(X)</span>}
-              </div>
+    <div className="min-h-screen bg-[#1f1f2f] flex justify-center items-center p-4">
+      <div className="game-container flex gap-8">
+        {/* Game Section */}
+        <div className="game-board">
+          {/* Game Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div
+              className={`player-indicator ${playingAs === "circle" ? "bg-blue-600" : "bg-blue-400"} ${(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? "player-active" : ""}`}
+            >
+              {playerName}
+              {playingAs === "circle" && <span className="ml-2 font-bold">(O)</span>}
+              {playingAs === "cross" && <span className="ml-2 font-bold">(X)</span>}
             </div>
 
-            {/* Game Board */}
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-center mb-2 text-gray-200">Tic Tac Toe</h1>
-              <p className="text-lg font-bold text-center mb-6 text-gray-400">Player yang sedang bermain {playerName}</p>
-              <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto">
-                {gameState.map((arr, rowIndex) =>
-                  arr.map((e, colIndex) => {
-                    return (
-                      <Square
-                        key={rowIndex * 3 + colIndex}
-                        socket={socket}
-                        gameState={gameState}
-                        setGameState={setGameState}
-                        id={rowIndex * 3 + colIndex}
-                        currentPlayer={currentPlayer}
-                        setCurrentPlayer={setCurrentPlayer}
-                        finishedState={finishedState}
-                        finishedArrayState={finishedArrayState}
-                        currentElement={e}
-                        playingAs={playingAs}
-                      />
-                    );
-                  })
-                )}
-              </div>
-            </div>
-
-            {/* Game Status */}
-            <div className="text-center bg-white p-3 rounded-lg shadow">
-              {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
-              {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-blue-700">Its a Draw</div>}
-              {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Playing against {opponentName}</div>}
-              {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
+            <div className={`player-indicator ${playingAs === "cross" ? "bg-red-600" : "bg-red-400"} ${(playingAs !== "circle" && currentPlayer === "circle") || (playingAs !== "cross" && currentPlayer === "cross") ? "player-active" : ""}`}>
+              {opponentName}
+              {playingAs !== "circle" && <span className="ml-2 font-bold">(O)</span>}
+              {playingAs !== "cross" && <span className="ml-2 font-bold">(X)</span>}
             </div>
           </div>
 
-          {/* Chat Section */}
-          <div className="bg-white rounded-lg shadow-lg w-96 flex flex-col">
-            <div className="p-4 bg-gray-800 text-white rounded-t-lg">
-              <h2 className="text-xl font-semibold">Game Chat</h2>
+          {/* Game Grid */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-center mb-6 text-white">Tic Tac Toe</h1>
+            <div className="grid grid-cols-3 gap-4 max-w-[350px] mx-auto">
+              {gameState.map((arr, rowIndex) =>
+                arr.map((e, colIndex) => {
+                  return (
+                    <Square
+                      key={rowIndex * 3 + colIndex}
+                      socket={socket}
+                      gameState={gameState}
+                      setGameState={setGameState}
+                      id={rowIndex * 3 + colIndex}
+                      currentPlayer={currentPlayer}
+                      setCurrentPlayer={setCurrentPlayer}
+                      finishedState={finishedState}
+                      finishedArrayState={finishedArrayState}
+                      currentElement={e}
+                      playingAs={playingAs}
+                    />
+                  );
+                })
+              )}
             </div>
+          </div>
 
-            <div className="flex-grow p-4 overflow-auto h-[400px] bg-gray-100">
-              {messages.map((msg, index) => (
-                <div key={index} className={`mb-4 ${msg.from === playerName ? "flex justify-end" : "flex justify-start"}`}>
-                  <div className={`max-w-[70%] ${msg.from === playerName ? "bg-blue-500 text-white" : "bg-gray-300"} rounded-lg p-3`}>
-                    <div className={`text-xs mb-1 ${msg.from === playerName ? "text-blue-100" : "text-gray-600"}`}>{msg.from === playerName ? "You" : msg.from}</div>
-                    <div className=" text-gray-300 break-words">{msg.message}</div>
-                  </div>
+          {/* Game Status */}
+          <div className="status-container">
+            {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
+            {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700">Its a Draw</div>}
+            {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-200">Playing against {opponentName}</div>}
+            {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
+          </div>
+        </div>
+
+        {/* Chat Section */}
+        <div className="chat-container w-96 flex flex-col">
+          <div className="chat-header p-4 rounded-t-lg">
+            <h2 className="text-xl font-semibold text-white">Game Chat</h2>
+          </div>
+
+          <div className="chat-messages flex-grow p-4 overflow-auto h-[400px]">
+            {messages.map((msg, index) => (
+              <div key={index} className={`mb-4 ${msg.from === playerName ? "flex justify-end" : "flex justify-start"}`}>
+                <div className={`message-bubble ${msg.from === playerName ? "message-own" : "message-other"}`}>
+                  <div className="text-xs mb-1 opacity-80">{msg.from === playerName ? "You" : msg.from}</div>
+                  <div className="break-words">{msg.message}</div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
 
-            <div className="p-4 bg-gray-50 border-t rounded-b-lg">
-              <form onSubmit={handleSubmit} className="flex gap-2">
-                <input
-                  value={messageSent}
-                  onChange={(e) => setMessageSent(e.target.value)}
-                  type="text"
-                  placeholder="Ketik pesan Anda..."
-                  className="flex-grow p-3 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                />
-                <button type="submit" disabled={!messageSent.trim()} className={`px-6 py-2 rounded-lg transition-colors ${messageSent.trim() ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>
-                  Kirim
-                </button>
-              </form>
-            </div>
+          <div className="p-4 border-t border-gray-700 rounded-b-lg">
+            <form onSubmit={handleSubmit} className="flex gap-2">
+              <input
+                value={messageSent}
+                onChange={(e) => setMessageSent(e.target.value)}
+                type="text"
+                placeholder="Ketik pesan Anda..."
+                className="flex-grow p-3 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button type="submit" disabled={!messageSent.trim()} className={`px-6 py-2 rounded-lg transition-colors ${messageSent.trim() ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}>
+                Kirim
+              </button>
+            </form>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
