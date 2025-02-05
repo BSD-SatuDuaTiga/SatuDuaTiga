@@ -2,6 +2,7 @@ import Square from "../components/Square";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
+import { useMusic } from "../context/MusicContext";
 
 const renderFrom = [
   [1, 2, 3],
@@ -19,6 +20,7 @@ export default function TicTacToe() {
   const [playerName, setPlayerName] = useState("");
   const [opponentName, setOpponentName] = useState("");
   const [playingAs, setPlayingAs] = useState(null);
+  const { startMusic, stopMusic } = useMusic();
 
   const checkWinner = () => {
     // row
@@ -50,8 +52,6 @@ export default function TicTacToe() {
       if (e === "circle" || e === "cross") return true;
     });
 
-    // console.log(isDrawMatch);
-
     if (isDrawMatch) return "draw";
 
     return null;
@@ -61,8 +61,19 @@ export default function TicTacToe() {
     const winner = checkWinner();
     if (winner) {
       setFinishedState(winner);
+      stopMusic();
     }
   }, [gameState]);
+
+  // Start music when opponent is found
+  useEffect(() => {
+    if (opponentName) {
+      startMusic();
+    }
+    return () => {
+      stopMusic();
+    };
+  }, [opponentName]);
 
   const takePlayerName = async () => {
     const result = await Swal.fire({
@@ -80,9 +91,6 @@ export default function TicTacToe() {
   };
 
   socket?.on("playerMoveFromServer", function (data) {
-    // console.log("Got data from server");
-    // setCurrentPlayer(data.state.currentPlayer);
-
     const id = data.state.id;
     setGameState((prevState) => {
       let newState = [...prevState];
@@ -104,15 +112,12 @@ export default function TicTacToe() {
   });
 
   socket?.on("OpponentFound", function (data) {
-    // console.log(data);
-
     setPlayingAs(data.playingAs);
     setOpponentName(data.opponentName);
   });
 
   async function handlePlayOnline() {
     const result = await takePlayerName();
-    // console.log(result);
 
     if (!result.isConfirmed) {
       return;
@@ -192,7 +197,6 @@ export default function TicTacToe() {
 
           {/* Game Status */}
           <div className="text-center">
-            {/* {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Current Turn: Player X</div>} */}
             {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700 mt-4">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
             {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700 mt-4">Its a Draw</div>}
             {!finishedState && opponentName && <div className="text-lg font-semibold text-green-700 mt-4">You are playing against {opponentName} </div>}
