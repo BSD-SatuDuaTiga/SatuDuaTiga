@@ -66,8 +66,8 @@ export default function Square({ currentElement, playingAs, socket, setGameState
     <>
       <div
         onClick={clickOnSquare}
-        className={`w-20 h-20 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
-          currentPlayer !== playingAs ? "cursor-not-allowed" : ""
+        className={`w-20 h-20 bg-blue-100  rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
+          currentPlayer !== playingAs ? "cursor-not-allowed" : "cursor-pointer"
         } ${finishedArrayState.includes(id) ? finishedState + "-won" : ""} ${finishedState && finishedState !== playingAs ? "bg-grey-400" : ""}`}
       >
         {currentElement === "circle" ? circleSvg : currentElement === "cross" ? crossSvg : icon}

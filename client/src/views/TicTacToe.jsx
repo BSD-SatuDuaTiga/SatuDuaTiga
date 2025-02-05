@@ -156,46 +156,75 @@ export default function TicTacToe() {
 
   return (
     <>
-      <div className="min-h-screen bg[#1f1f2f] flex justify-center items-center p-4">
-        <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md w-full">
-          {/* Game Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""}`}>{playerName}</div>
-            <div className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""}`}>{opponentName}</div>
-          </div>
+      <div className="min-h-screen bg-[#1f1f2f] flex justify-center items-center p-4">
+        <div className="flex gap-8">
+          {/* Game Section */}
+          <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md">
+            {/* Game Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div className={`left px-4 py-2 rounded-lg bg-blue-500 text-white ${currentPlayer === playingAs ? "ring-2 ring-yellow-400" : ""}`}>{playerName}</div>
+              <div className={`right px-4 py-2 rounded-lg bg-red-500 text-white ${currentPlayer !== playingAs ? "ring-2 ring-yellow-400" : ""}`}>{opponentName}</div>
+            </div>
 
-          {/* Game Board */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Tic Tac Toe</h1>
-            <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto">
-              {gameState.map((arr, rowIndex) =>
-                arr.map((e, colIndex) => {
-                  return (
-                    <Square
-                      key={rowIndex * 3 + colIndex}
-                      socket={socket}
-                      gameState={gameState}
-                      setGameState={setGameState}
-                      id={rowIndex * 3 + colIndex}
-                      currentPlayer={currentPlayer}
-                      setCurrentPlayer={setCurrentPlayer}
-                      finishedState={finishedState}
-                      finishedArrayState={finishedArrayState}
-                      currentElement={e}
-                      playingAs={playingAs}
-                    />
-                  );
-                })
-              )}
+            {/* Game Board */}
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Tic Tac Toe</h1>
+              <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto">
+                {gameState.map((arr, rowIndex) =>
+                  arr.map((e, colIndex) => {
+                    return (
+                      <Square
+                        key={rowIndex * 3 + colIndex}
+                        socket={socket}
+                        gameState={gameState}
+                        setGameState={setGameState}
+                        id={rowIndex * 3 + colIndex}
+                        currentPlayer={currentPlayer}
+                        setCurrentPlayer={setCurrentPlayer}
+                        finishedState={finishedState}
+                        finishedArrayState={finishedArrayState}
+                        currentElement={e}
+                        playingAs={playingAs}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            {/* Game Status */}
+            <div className="text-center bg-white p-3 rounded-lg shadow">
+              {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
+              {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-blue-700">Its a Draw</div>}
+              {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Playing against {opponentName}</div>}
             </div>
           </div>
 
-          {/* Game Status */}
-          <div className="text-center">
-            {/* {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Current Turn: Player X</div>} */}
-            {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700 mt-4">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
-            {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700 mt-4">Its a Draw</div>}
-            {!finishedState && opponentName && <div className="text-lg font-semibold text-green-700 mt-4">You are playing against {opponentName} </div>}
+          {/* Chat Section */}
+          <div className="bg-white rounded-lg shadow-lg w-96 flex flex-col">
+            <div className="p-4 bg-gray-800 text-white rounded-t-lg">
+              <h2 className="text-xl font-semibold">Game Chat</h2>
+            </div>
+
+            <div className="flex-grow p-4 overflow-auto h-[400px] bg-gray-100">
+              <div className="space-y-4">
+                <div className="chat chat-end">
+                  <div className="chat-bubble bg-blue-500 text-white p-3 rounded-lg max-w-[80%]">Hello there!</div>
+                </div>
+                <div className="chat chat-start">
+                  <div className="chat-bubble bg-gray-300 p-3 rounded-lg max-w-[80%]">Hi! Ready to play?</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border-t">
+              <form className="flex gap-2">
+                <input type="text" placeholder="Type your message…" className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                  Send
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
