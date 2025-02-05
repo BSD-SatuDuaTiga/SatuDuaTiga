@@ -13,6 +13,7 @@ const io = new Server(httpServer, {
 });
 
 const users = {};
+const allRoms = [];
 
 io.on("connection", (socket) => {
   // console.log("New user joined socket " + socket.id);
@@ -41,6 +42,11 @@ io.on("connection", (socket) => {
     // console.log(opponentPlayer, "opponentPlayer");
 
     if (opponentPlayer) {
+      allRoms.push({
+        player1: opponentPlayer,
+        player2: currentUser,
+      });
+
       currentUser.socket.emit("OpponentFound", {
         opponentName: opponentPlayer.playerName,
         playingAs: "circle",
@@ -80,6 +86,21 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const currentUser = users[socket.id];
     currentUser.online = false;
+    currentUser.playing = false;
+
+    for (let index = 0; index < allRoms.length; index++) {
+      const { player1, player2 } = allRoms[index];
+
+      if (player1.socket.id === socket.id) {
+        player2.socket.emit("opponentLeftMatch");
+        break;
+      }
+
+      if (player2.socket.id === socket.id) {
+        player1.socket.emit("opponentLeftMatch");
+        break;
+      }
+    }
   });
 });
 

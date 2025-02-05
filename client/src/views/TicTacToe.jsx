@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router";
 import Square from "../components/Square";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
+import Toastify from "toastify-js";
 
 const renderFrom = [
   [1, 2, 3],
@@ -21,6 +23,7 @@ export default function TicTacToe() {
   const [playingAs, setPlayingAs] = useState(null);
   const [messageSent, setMessageSent] = useState("");
   const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
 
   const checkWinner = () => {
     // row
@@ -104,6 +107,15 @@ export default function TicTacToe() {
       socket.off("message:update");
     };
   }, [socket]);
+
+  socket?.on("opponentLeftMatch", () => {
+    Swal.fire({ title: "You Won Opponent Left Match" }).then((result) => {
+      setFinishedState("opponentLeftMatch");
+      if (result.isConfirmed) {
+        navigate("/tic-tac-toe");
+      }
+    });
+  });
 
   socket?.on("playerMoveFromServer", function (data) {
     // console.log("Got data from server");
@@ -220,9 +232,10 @@ export default function TicTacToe() {
 
             {/* Game Status */}
             <div className="text-center bg-white p-3 rounded-lg shadow">
-              {finishedState && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
+              {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
               {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-blue-700">Its a Draw</div>}
               {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-700">Playing against {opponentName}</div>}
+              {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
             </div>
           </div>
 
