@@ -1,33 +1,88 @@
-@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+/* Custom Properties */
+:root {
+  --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --gradient-secondary: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  --gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+/* Base Styles */
 
 body {
-  background-color: #1f1f2f;
+  background: var(--gradient-bg);
+  background-attachment: fixed;
   color: #fff;
   font-family: "Happy Monkey", serif;
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .left,
 .right {
-  height: 30px;
-  width: 120px;
-  background-color: red;
-  border-bottom-left-radius: 50px;
-  background-color: #4b495f;
-  border-top-right-radius: 50px;
-  padding-top: 7px;
-  font-size: 18px;
-  padding-bottom: 5px;
+  height: 40px;
+  width: 150px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 8px 15px;
+  font-size: 16px;
+  font-weight: 600;
   text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
 
 .move-detection {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 400px;
+  width: 450px;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
 }
 .circle-won {
   background-color: #3fa7f0;
+  background: var(--gradient-primary) !important;
+  transform: scale(1.03);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-glow);
+  animation: floatWin 3s ease-in-out infinite;
+}
+
+@keyframes floatWin {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.03);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.05);
+  }
 }
 
 .cross-won {
@@ -35,9 +90,155 @@ body {
 }
 
 .current-move-cirlce {
-  background-color: #dd7f9f !important;
+  background: var(--gradient-secondary) !important;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  animation: pulse 2s infinite;
 }
 
 .current-move-cross {
-  background-color: #3fa7f0 !important;
+  background: var(--gradient-primary) !important;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  animation: pulse 2s infinite;
+}
+
+/* Game Board Container */
+.bg-gray-300 {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px !important;
+  box-shadow: var(--shadow-lg);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: all 0.4s ease;
+}
+.bg-gray-300:hover {
+  transform: translateY(-5px) rotateX(2deg) rotateY(2deg);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(59, 130, 246, 0.3);
+}
+/* Game Squares */
+.bg-blue-100 {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+.bg-blue-100::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.bg-blue-100:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+.bg-blue-100:hover::after {
+  transform: translateX(100%);
+}
+/* Play Online Button */
+.bg-green-500 {
+  background: var(--gradient-success) !important;
+  border: none;
+  padding: 16px 32px !important;
+  border-radius: 16px !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.bg-green-500::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.bg-green-500:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(5, 150, 105, 0.4);
+}
+.bg-green-500:hover::before {
+  transform: translateX(100%);
+}
+/* Loading State */
+.text-xl {
+  font-size: 1.75rem !important;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: glow 2s infinite;
+}
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.7), 0 0 30px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+  }
+}
+/* Game Status Messages */
+.text-green-700 {
+  color: #60a5fa !important;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  letter-spacing: 0.5px;
+  animation: statusGlow 2s infinite;
+}
+@keyframes statusGlow {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+/* SVG Icons */
+svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+svg:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+/* Custom Animations */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1) translateY(-3px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-3px);
+  }
+}
+/* Responsive Design Improvements */
+@media (max-width: 640px) {
+  .move-detection {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .left,
+  .right {
+    width: 120px;
+    font-size: 14px;
+  }
 }
