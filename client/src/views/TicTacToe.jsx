@@ -216,13 +216,23 @@ export default function TicTacToe() {
           <div className="bg-gray-300 rounded-lg shadow-lg p-8 max-w-md">
             {/* Game Header */}
             <div className="flex justify-between items-center mb-8">
-              <div className={`left px-4 py-2 rounded-lg bg-blue-500 text-white ${currentPlayer === playingAs ? "ring-2 ring-yellow-400" : ""}`}>{playerName}</div>
-              <div className={`right px-4 py-2 rounded-lg bg-red-500 text-white ${currentPlayer !== playingAs ? "ring-2 ring-yellow-400" : ""}`}>{opponentName}</div>
+              <div className={`left px-4 py-2 rounded-lg flex items-center gap-2 ${playingAs === "circle" ? "bg-blue-600 text-white ring-2 ring-yellow-400" : "bg-blue-400 text-white"}`}>
+                {playerName}
+                {playingAs === "circle" && <span className="text-sm font-bold">(O)</span>}
+                {playingAs === "cross" && <span className="text-sm font-bold">(X)</span>}
+              </div>
+
+              <div className={`right px-4 py-2 rounded-lg flex items-center gap-2 ${playingAs === "cross" ? "bg-red-600 text-white ring-2 ring-yellow-400" : "bg-red-400 text-white"}`}>
+                {opponentName}
+                {playingAs !== "circle" && <span className="text-sm font-bold">(O)</span>}
+                {playingAs !== "cross" && <span className="text-sm font-bold">(X)</span>}
+              </div>
             </div>
 
             {/* Game Board */}
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Tic Tac Toe</h1>
+              <h1 className="text-2xl font-bold text-center mb-2 text-gray-200">Tic Tac Toe</h1>
+              <p className="text-lg font-bold text-center mb-6 text-gray-400">Player yang sedang bermain {playerName}</p>
               <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto">
                 {gameState.map((arr, rowIndex) =>
                   arr.map((e, colIndex) => {
