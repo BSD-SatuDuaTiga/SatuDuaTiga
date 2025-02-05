@@ -19,6 +19,8 @@ export default function TicTacToe() {
   const [playerName, setPlayerName] = useState("");
   const [opponentName, setOpponentName] = useState("");
   const [playingAs, setPlayingAs] = useState(null);
+  const [messageSent, setMessageSent] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const checkWinner = () => {
     // row
@@ -78,6 +80,30 @@ export default function TicTacToe() {
     });
     return result;
   };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!messageSent.trim()) return;
+
+    socket.emit("message:new", {
+      from: playerName,
+      message: messageSent,
+    });
+
+    setMessageSent("");
+  }
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("message:update", (newMessage) => {
+      setMessages((current) => [...current, newMessage]);
+    });
+
+    return () => {
+      socket.off("message:update");
+    };
+  }, [socket]);
 
   socket?.on("playerMoveFromServer", function (data) {
     // console.log("Got data from server");
@@ -207,21 +233,27 @@ export default function TicTacToe() {
             </div>
 
             <div className="flex-grow p-4 overflow-auto h-[400px] bg-gray-100">
-              <div className="space-y-4">
-                <div className="chat chat-end">
-                  <div className="chat-bubble bg-blue-500 text-white p-3 rounded-lg max-w-[80%]">Hello there!</div>
+              {messages.map((msg, index) => (
+                <div key={index} className={`mb-4 ${msg.from === playerName ? "flex justify-end" : "flex justify-start"}`}>
+                  <div className={`max-w-[70%] ${msg.from === playerName ? "bg-blue-500 text-white" : "bg-gray-300"} rounded-lg p-3`}>
+                    <div className={`text-xs mb-1 ${msg.from === playerName ? "text-blue-100" : "text-gray-600"}`}>{msg.from === playerName ? "You" : msg.from}</div>
+                    <div className="break-words">{msg.message}</div>
+                  </div>
                 </div>
-                <div className="chat chat-start">
-                  <div className="chat-bubble bg-gray-300 p-3 rounded-lg max-w-[80%]">Hi! Ready to play?</div>
-                </div>
-              </div>
+              ))}
             </div>
 
-            <div className="p-4 border-t">
-              <form className="flex gap-2">
-                <input type="text" placeholder="Type your message…" className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                  Send
+            <div className="p-4 bg-gray-50 border-t rounded-b-lg">
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <input
+                  value={messageSent}
+                  onChange={(e) => setMessageSent(e.target.value)}
+                  type="text"
+                  placeholder="Ketik pesan Anda..."
+                  className="flex-grow p-3 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+                <button type="submit" disabled={!messageSent.trim()} className={`px-6 py-2 rounded-lg transition-colors ${messageSent.trim() ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>
+                  Kirim
                 </button>
               </form>
             </div>
