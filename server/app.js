@@ -1,10 +1,11 @@
+// Import library yang dibutuhkan
 const express = require("express");
 const app = express();
 const port = 3000;
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
-// Socket Io
+// Konfigurasi Socket.IO dengan CORS
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -12,26 +13,25 @@ const io = new Server(httpServer, {
   },
 });
 
+// Menyimpan data pengguna dan ruangan
 const users = {};
 const allRoms = [];
 
+// Menangani koneksi socket baru
 io.on("connection", (socket) => {
-  // console.log("New user joined socket " + socket.id);
-
+  // Menyimpan informasi pengguna baru
   users[socket.id] = {
     socket: socket,
     online: true,
   };
 
+  // Menangani permintaan bermain
   socket.on("request_to_play", (data) => {
-    // console.log(data, "ckck");
-
     const currentUser = users[socket.id];
     currentUser.playerName = data.playerName;
-    // console.log(currentUser, "cucu");
 
+    // Mencari lawan yang tersedia
     let opponentPlayer;
-
     for (const key in users) {
       const user = users[key];
       if (user.online && !user.playing && socket.id !== key) {
@@ -39,14 +39,15 @@ io.on("connection", (socket) => {
         break;
       }
     }
-    // console.log(opponentPlayer, "opponentPlayer");
 
     if (opponentPlayer) {
+      // Jika lawan ditemukan, buat ruangan baru
       allRoms.push({
         player1: opponentPlayer,
         player2: currentUser,
       });
 
+      // Mengirim informasi ke kedua pemain
       currentUser.socket.emit("OpponentFound", {
         opponentName: opponentPlayer.playerName,
         playingAs: "circle",
@@ -57,25 +58,25 @@ io.on("connection", (socket) => {
         playingAs: "cross",
       });
 
+      // Menangani perpindahan pemain
       currentUser.socket.on("playerMoveFromClient", (data) => {
-        // console.log(data, "data");
         opponentPlayer.socket.emit("playerMoveFromServer", {
           ...data,
         });
       });
 
       opponentPlayer.socket.on("playerMoveFromClient", (data) => {
-        // console.log(data, "data");
         currentUser.socket.emit("playerMoveFromServer", {
           ...data,
         });
       });
     } else {
+      // Jika tidak ada lawan, kirim notifikasi
       currentUser.socket.emit("OpponentNotFound");
     }
   });
 
-  //chat
+  // Menangani pesan chat
   socket.on("message:new", (data) => {
     io.emit("message:update", {
       from: data.from,
@@ -83,11 +84,13 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Menangani disconnect
   socket.on("disconnect", () => {
     const currentUser = users[socket.id];
     currentUser.online = false;
     currentUser.playing = false;
 
+    // Memberitahu lawan jika pemain keluar
     for (let index = 0; index < allRoms.length; index++) {
       const { player1, player2 } = allRoms[index];
 
@@ -104,6 +107,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// Menjalankan server
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

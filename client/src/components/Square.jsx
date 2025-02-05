@@ -25,21 +25,28 @@ const crossSvg = (
 export default function Square({ currentElement, playingAs, socket, setGameState, id, currentPlayer, setCurrentPlayer, finishedState, finishedArrayState }) {
   const [icon, setIcon] = useState(null);
 
+  // Fungsi untuk menangani klik pada kotak
   const clickOnSquare = () => {
+    // Jika pemain tidak sesuai, tidak ada aksi
     if (currentPlayer !== playingAs) {
       return;
     }
+
+    // Jika game sudah selesai, tidak ada aksi
     if (finishedState) {
       return;
     }
 
+    // Jika kotak belum memiliki ikon
     if (!icon) {
+      // Menentukan ikon berdasarkan pemain saat ini
       if (currentPlayer === "circle") {
         setIcon(circleSvg);
       } else {
         setIcon(crossSvg);
       }
 
+      // Mengirim pergerakan ke server
       const myCurrentPlayer = currentPlayer;
 
       socket.emit("playerMoveFromClient", {
@@ -49,8 +56,11 @@ export default function Square({ currentElement, playingAs, socket, setGameState
         },
       });
 
+      // Mengubah pemain saat ini
+
       setCurrentPlayer(currentPlayer === "circle" ? "cross" : "circle");
 
+      // Mengubah state game
       setGameState((prevState) => {
         let newState = [...prevState];
         const rowIndex = Math.floor(id / 3);
