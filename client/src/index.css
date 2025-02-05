@@ -2,242 +2,246 @@
 
 /* Custom Properties */
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
+	--glass-bg: rgba(255, 255, 255, 0.1);
+	--glass-border: rgba(255, 255, 255, 0.05);
+	--shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
+	--shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* Base Styles */
 body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #fff;
-  font-family: "Outfit", sans-serif;
-  margin: 0;
-  min-height: 100vh;
+	background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+	color: #fff;
+	font-family: "Outfit", sans-serif;
+	margin: 0;
+	min-height: 100vh;
 }
 
 /* Player indicators */
+/* Styles for player indicators on the left and right sides, 
+   providing a glassy background with a blur effect, rounded borders, 
+   and a shadow for a 3D appearance. The elements are centered 
+   with a smooth transition effect on interactions. */
 .left,
 .right {
-  height: 40px;
-  width: 150px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 8px 15px;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+	height: 40px;
+	width: 150px;
+	background: var(--glass-bg);
+	backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	border-radius: 16px;
+	padding: 8px 15px;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+	transition: all 0.3s ease;
+	box-shadow: var(--shadow-sm);
 }
 
 /* Game states */
 .circle-won {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+	transform: scale(1.03);
+	box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
 .cross-won {
-  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
-  transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+	background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+	transform: scale(1.03);
+	box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
 }
 
 .current-move-cirlce,
 .current-move-cross {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+	transform: translateY(-3px);
+	box-shadow: var(--shadow-lg);
 }
 
 .current-move-cirlce {
-  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+	background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
 }
 
 .current-move-cross {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
 }
 
 /* Game board */
 .bg-gray-300 {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 30px;
-  box-shadow: var(--shadow-lg);
-  transition: transform 0.3s ease;
+	background: var(--glass-bg);
+	backdrop-filter: blur(16px);
+	border: 1px solid var(--glass-border);
+	border-radius: 30px;
+	box-shadow: var(--shadow-lg);
+	transition: transform 0.3s ease;
 }
 
 .bg-gray-300:hover {
-  transform: translateY(-5px);
+	transform: translateY(-5px);
 }
 
 /* Game squares */
 .bg-blue-100 {
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  transition: all 0.3s ease;
+	background: var(--glass-bg);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--glass-border);
+	transition: all 0.3s ease;
 }
 
 .bg-blue-100:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
+	background: rgba(255, 255, 255, 0.15);
+	transform: translateY(-2px);
 }
 
 /* Play button */
 .bg-green-500 {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-  border: none;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 600;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+	background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+	border: none;
+	padding: 16px 32px;
+	border-radius: 16px;
+	font-weight: 600;
+	box-shadow: var(--shadow-md);
+	transition: all 0.3s ease;
 }
 
 .bg-green-500:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+	transform: translateY(-3px);
+	box-shadow: var(--shadow-lg);
 }
 
 /* Loading text */
 .text-xl {
-  font-size: 1.75rem;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	font-size: 1.75rem;
+	font-weight: 600;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Game status */
 .text-green-700 {
-  color: #60a5fa;
-  font-weight: 700;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+	color: #60a5fa;
+	font-weight: 700;
+	text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
 /* Responsive */
 @media (max-width: 640px) {
-  .left,
-  .right {
-    width: 120px;
-    font-size: 14px;
-  }
+	.left,
+	.right {
+		width: 120px;
+		font-size: 14px;
+	}
 }
 
 /* Game Container */
 .game-container {
-  background: rgba(31, 41, 55, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 30px;
-  padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+	background: rgba(31, 41, 55, 0.95);
+	backdrop-filter: blur(20px);
+	border-radius: 30px;
+	padding: 2rem;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 /* Chat Container */
 .chat-container {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 20px;
 }
 
 .chat-header {
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chat-messages {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 .chat-messages::-webkit-scrollbar {
-  width: 6px;
+	width: 6px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 3px;
 }
 
 .message-bubble {
-  max-width: 70%;
-  padding: 0.75rem 1rem;
-  border-radius: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	max-width: 70%;
+	padding: 0.75rem 1rem;
+	border-radius: 16px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message-own {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+	color: white;
 }
 
 .message-other {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e5e7eb;
+	background: rgba(255, 255, 255, 0.1);
+	color: #e5e7eb;
 }
 
 /* Game Board */
 .game-board {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(12px);
+	border-radius: 20px;
+	padding: 1.5rem;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .game-square {
-  aspect-ratio: 1;
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+	aspect-ratio: 1;
+	transition: all 0.3s ease;
+	border-radius: 12px;
+	border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .game-square:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+	transform: scale(1.05);
+	box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 /* Player Indicators */
 .player-indicator {
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+	padding: 0.75rem 1.25rem;
+	border-radius: 12px;
+	font-weight: 600;
+	transition: all 0.3s ease;
 }
 
 .player-active {
-  animation: pulse 2s infinite;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+	animation: pulse 2s infinite;
+	box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 /* Game Status */
 .status-container {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 1rem;
-  margin-top: 1.5rem;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	background: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(8px);
+	border-radius: 16px;
+	padding: 1rem;
+	margin-top: 1.5rem;
+	text-align: center;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
