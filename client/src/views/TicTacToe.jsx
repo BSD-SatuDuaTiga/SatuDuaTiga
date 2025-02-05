@@ -3,7 +3,8 @@ import Square from "../components/Square";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
-import Toastify from "toastify-js";
+// import Toastify from "toastify-js";
+import { useMusic } from "../context/MusicContext";
 
 const renderFrom = [
   [1, 2, 3],
@@ -24,6 +25,7 @@ export default function TicTacToe() {
   const [messageSent, setMessageSent] = useState("");
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
+  const { startMusic, stopMusic } = useMusic();
 
   const checkWinner = () => {
     // row
@@ -66,8 +68,19 @@ export default function TicTacToe() {
     const winner = checkWinner();
     if (winner) {
       setFinishedState(winner);
+      stopMusic();
     }
   }, [gameState]);
+
+  // Start music when opponent is found
+  useEffect(() => {
+    if (opponentName) {
+      startMusic();
+    }
+    return () => {
+      stopMusic();
+    };
+  }, [opponentName]);
 
   const takePlayerName = async () => {
     const result = await Swal.fire({
@@ -250,7 +263,7 @@ export default function TicTacToe() {
                 <div key={index} className={`mb-4 ${msg.from === playerName ? "flex justify-end" : "flex justify-start"}`}>
                   <div className={`max-w-[70%] ${msg.from === playerName ? "bg-blue-500 text-white" : "bg-gray-300"} rounded-lg p-3`}>
                     <div className={`text-xs mb-1 ${msg.from === playerName ? "text-blue-100" : "text-gray-600"}`}>{msg.from === playerName ? "You" : msg.from}</div>
-                    <div className="break-words">{msg.message}</div>
+                    <div className=" text-gray-300 break-words">{msg.message}</div>
                   </div>
                 </div>
               ))}
