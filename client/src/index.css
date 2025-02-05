@@ -10,23 +10,6 @@
 }
 
 /* Base Styles */
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
-
-/* Custom Properties */
-:root {
-	--gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-	--gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-	--gradient-secondary: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
-	--gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
-	--glass-bg: rgba(255, 255, 255, 0.1);
-	--glass-border: rgba(255, 255, 255, 0.05);
-	--shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
-	--shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
-	--shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
-	--shadow-glow: 0 0 20px rgba(59, 130, 246, 0.5);
-}
-
-/* Base Styles */
 body {
 	background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 	color: #fff;
@@ -36,6 +19,10 @@ body {
 }
 
 /* Player indicators */
+/* Styles for player indicators on the left and right sides, 
+   providing a glassy background with a blur effect, rounded borders, 
+   and a shadow for a 3D appearance. The elements are centered 
+   with a smooth transition effect on interactions. */
 .left,
 .right {
 	height: 40px;

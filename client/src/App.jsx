@@ -2,10 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import TicTacToe from "./views/TicTacToe";
 import HomePage from "./views/HomePage";
 import { MusicProvider } from "./context/MusicContext";
+import { ThemeProvider } from "./context/Theme";
 
 export default function App() {
   return (
-    <>
+    <ThemeProvider>
       <MusicProvider>
         <BrowserRouter>
           <Routes>
@@ -14,6 +15,6 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </MusicProvider>
-    </>
+    </ThemeProvider>
   );
 }
