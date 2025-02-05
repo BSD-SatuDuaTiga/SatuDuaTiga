@@ -125,7 +125,7 @@ export default function TicTacToe() {
     Swal.fire({ title: "You Won Opponent Left Match" }).then((result) => {
       setFinishedState("opponentLeftMatch");
       if (result.isConfirmed) {
-        navigate("/tic-tac-toe");
+        navigate("/");
       }
     });
   });
