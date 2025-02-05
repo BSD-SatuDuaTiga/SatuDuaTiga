@@ -13,22 +13,22 @@ const renderFrom = [
 ];
 
 export default function TicTacToe() {
-  const [gameState, setGameState] = useState(renderFrom);
-  const [currentPlayer, setCurrentPlayer] = useState("circle");
-  const [finishedState, setFinishedState] = useState(false);
-  const [finishedArrayState, setFinishedArrayState] = useState([]);
-  const [playOnline, setPlayOnline] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [playerName, setPlayerName] = useState("");
-  const [opponentName, setOpponentName] = useState("");
-  const [playingAs, setPlayingAs] = useState(null);
-  const [messageSent, setMessageSent] = useState("");
-  const [messages, setMessages] = useState([]);
-  const navigate = useNavigate();
-  const { startMusic, stopMusic } = useMusic();
+  const [gameState, setGameState] = useState(renderFrom); // State untuk menyimpan state game
+  const [currentPlayer, setCurrentPlayer] = useState("circle"); // State untuk menyimpan pemain saat ini
+  const [finishedState, setFinishedState] = useState(false); // State untuk menyimpan status game selesai
+  const [finishedArrayState, setFinishedArrayState] = useState([]); // State untuk menyimpan array index yang memenangkan game
+  const [playOnline, setPlayOnline] = useState(false); // State untuk menyimpan status bermain online
+  const [socket, setSocket] = useState(null); // State untuk menyimpan socket
+  const [playerName, setPlayerName] = useState(""); // State untuk menyimpan nama pemain
+  const [opponentName, setOpponentName] = useState(""); // State untuk menyimpan nama lawan
+  const [playingAs, setPlayingAs] = useState(null); // State untuk menyimpan pemain yang dipilih
+  const [messageSent, setMessageSent] = useState(""); // State untuk menyimpan pesan yang akan dikirim
+  const [messages, setMessages] = useState([]); // State untuk menyimpan pesan yang sudah dikirim
+  const navigate = useNavigate(); // Fungsi untuk mengalihkan halaman
+  const { startMusic, stopMusic } = useMusic(); // Fungsi untuk memulai dan menghentikan musik
 
   const checkWinner = () => {
-    // row
+    // Cek baris
     for (let row = 0; row < gameState.length; row++) {
       if (gameState[row][0] === gameState[row][1] && gameState[row][1] === gameState[row][2]) {
         setFinishedArrayState([row * 3 + 0, row * 3 + 1, row * 3 + 2]);
@@ -37,7 +37,7 @@ export default function TicTacToe() {
       }
     }
 
-    // column
+    // Cek kolom
     for (let col = 0; col < gameState.length; col++) {
       if (gameState[0][col] === gameState[1][col] && gameState[1][col] === gameState[2][col]) {
         setFinishedArrayState([0 * 3 + col, 1 * 3 + col, 2 * 3 + col]);
@@ -45,14 +45,17 @@ export default function TicTacToe() {
       }
     }
 
+    // Cek diagonal
     if (gameState[0][0] === gameState[1][1] && gameState[1][1] === gameState[2][2]) {
       return gameState[0][0];
     }
 
+    // Cek diagonal kedua
     if (gameState[0][2] === gameState[1][1] && gameState[1][1] === gameState[2][0]) {
       return gameState[0][2];
     }
 
+    // Cek draw
     const isDrawMatch = gameState.flat().every((e) => {
       if (e === "circle" || e === "cross") return true;
     });
@@ -64,6 +67,7 @@ export default function TicTacToe() {
     return null;
   };
 
+  // Effect untuk mengecek pemenang
   useEffect(() => {
     const winner = checkWinner();
     if (winner) {
@@ -82,6 +86,7 @@ export default function TicTacToe() {
     };
   }, [opponentName]);
 
+  // Fungsi untuk mengambil nama pemain
   const takePlayerName = async () => {
     const result = await Swal.fire({
       title: "Enter your name",
@@ -97,6 +102,7 @@ export default function TicTacToe() {
     return result;
   };
 
+  // Fungsi untuk mengirim pesan
   function handleSubmit(e) {
     e.preventDefault();
     if (!messageSent.trim()) return;
@@ -109,6 +115,7 @@ export default function TicTacToe() {
     setMessageSent("");
   }
 
+  // Effect untuk mengupdate pesan
   useEffect(() => {
     if (!socket) return;
 
@@ -121,6 +128,7 @@ export default function TicTacToe() {
     };
   }, [socket]);
 
+  // Effect untuk menangani keluar dari game
   socket?.on("opponentLeftMatch", () => {
     Swal.fire({ title: "You Won Opponent Left Match" }).then((result) => {
       setFinishedState("opponentLeftMatch");
@@ -130,6 +138,7 @@ export default function TicTacToe() {
     });
   });
 
+  // untuk menangani pergerakan dari server
   socket?.on("playerMoveFromServer", function (data) {
     // console.log("Got data from server");
     // setCurrentPlayer(data.state.currentPlayer);
@@ -146,43 +155,56 @@ export default function TicTacToe() {
     setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
   });
 
+  //  untuk menangani koneksi socket
   socket?.on("connect", function () {
     setPlayOnline(true);
   });
 
+  // untuk menangani jika lawan tidak ditemukan
   socket?.on("OpponentNotFound", function () {
     setOpponentName(false);
   });
 
+  // untuk menangani jika lawan ditemukan
   socket?.on("OpponentFound", function (data) {
     // console.log(data);
 
+    // Mengatur pemain yang dipilih
     setPlayingAs(data.playingAs);
+
+    // Mengatur nama lawan
     setOpponentName(data.opponentName);
   });
 
+  // Fungsi untuk memulai bermain online
   async function handlePlayOnline() {
     const result = await takePlayerName();
     // console.log(result);
 
+    // Jika pemain tidak mengonfirmasi, tidak ada aksi
     if (!result.isConfirmed) {
       return;
     }
 
+    // Mengatur nama pemain
     const username = result.value;
     setPlayerName(username);
 
+    // Membuat socket baru
     const newSocket = io("http://localhost:3000", {
       autoConnect: true,
     });
 
+    // Mengirim permintaan bermain ke server
     newSocket?.emit("request_to_play", {
       playerName: username,
     });
 
+    // Mengatur socket baru
     setSocket(newSocket);
   }
 
+  // Jika tidak bermain online
   if (!playOnline) {
     return (
       <>
@@ -198,6 +220,7 @@ export default function TicTacToe() {
     );
   }
 
+  // Jika bermain online dan lawan tidak ditemukan
   if (playOnline && !opponentName) {
     return (
       <>
@@ -208,6 +231,7 @@ export default function TicTacToe() {
     );
   }
 
+  // Jika bermain online dan lawan ditemukan
   return (
     <div className="min-h-screen bg-[#1f1f2f] flex justify-center items-center p-4">
       <div className="game-container flex gap-8">
