@@ -47,6 +47,25 @@ export default function HomePage() {
               </button>
             </div>
           </div>
+
+          {/* Game Card 1 */}
+          <div className="transform hover:scale-105 transition-all duration-300 w-full md:w-[400px] h-[300px]">
+            <div className="bg-black/30 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-2xl hover:shadow-yellow-500/30 group h-full flex flex-col">
+              <div className="flex-1">
+                <span className="text-5xl animate-bounce block mb-2">🎮</span>
+                <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-200 to-yellow-500 bg-clip-text text-transparent">FlipCard</h3>
+                <p className="text-white/70">Classic game of X and O. Challenge your friends!</p>
+              </div>
+              <button
+                className="w-full cursor-pointer py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-lg font-bold rounded-xl 
+                shadow-lg group-hover:shadow-yellow-500/50 transition-all duration-300 
+                hover:from-yellow-500 hover:to-yellow-700 transform hover:-translate-y-1"
+                onClick={() => navigate("/flip-card")}
+              >
+                Play Now
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

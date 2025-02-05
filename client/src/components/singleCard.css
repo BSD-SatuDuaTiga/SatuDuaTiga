@@ -1,0 +1,67 @@
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.card img {
+  width: 100%;
+  display: block;
+  border: 2px solid #fff;
+  border-radius: 6px;
+}
+
+.card .front {
+  transform: rotateY(90deg);
+  position: absolute;
+  transition: all ease-in 0.2s;
+}
+
+.flipped .front {
+  transform: rotateY(0deg);
+  transition-delay: 0.2s;
+}
+
+.card .back {
+  transition: all ease-in 0.2s;
+  transition-delay: 0.2s;
+}
+
+.flipped .back {
+  transform: rotateY(90deg);
+  transition-delay: 0s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+/* Efek bayangan saat hover */
+.card:hover img {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  .card {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .card img {
+    border-width: 2px;
+  }
+}
+
+/* Animasi ketika kartu cocok */
+.card.matched img {
+  border-color: #3fa7f0;
+  animation: matchedAnimation 0.5s ease-in-out;
+}
+
+@keyframes matchedAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
