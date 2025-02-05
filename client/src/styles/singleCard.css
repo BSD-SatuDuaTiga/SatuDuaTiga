@@ -1,0 +1,176 @@
+.card {
+  width: 100%; /* Set width as needed */
+  height: 210px; /* Set a fixed height */
+  perspective: 1000px; /* For 3D effect */
+}
+.card img {
+  width: 100%;
+  height: 100%; /* Ensure both images take full height */
+  display: block;
+  border: 2px solid #fff;
+  border-radius: 6px;
+  backface-visibility: hidden; /* Hide the back face when flipped */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+}
+.card .front {
+  transform: rotateY(90deg);
+  position: absolute;
+  transition: all ease-in 0.2s;
+}
+.flipped .front {
+  transform: rotateY(0deg);
+  transition-delay: 0.2s;
+  .card {
+    width: 100%; /* Set width as needed */
+    height: 210px; /* Set a fixed height */
+    perspective: 1000px; /* For 3D effect */
+  }
+  .front,
+  .back {
+    width: 100%;
+    height: 210px; /* Ensure both images take full height */
+    backface-visibility: hidden; /* Hide the back face when flipped */
+    position: absolute; /* Positioning for flipping effect */
+  }
+  .card {
+    width: 150px; /* Set width as needed */
+    height: 210px; /* Set a fixed height */
+    perspective: 1000px; /* For 3D effect */
+    position: relative; /* Required for absolute positioning of children */
+  }
+
+  .card img {
+    width: 100%;
+    height: 100%; /* Ensure both images take full height */
+    display: block;
+    border: 2px solid #fff;
+    border-radius: 6px;
+    backface-visibility: hidden; /* Hide the back face when flipped */
+    object-fit: cover; /* Maintain aspect ratio and cover the area */
+  }
+
+  .card .front,
+  .card .back {
+    position: absolute; /* Positioning for flipping effect */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%;
+    height: 210px; /* Ensure both images take full height */
+    transition: transform 0.2s ease; /* Smooth transition */
+  }
+
+  .card .front {
+    transform: rotateY(0deg); /* Default state */
+  }
+
+  .card .back {
+    transform: rotateY(180deg); /* Rotate back face */
+  }
+
+  .card.flipped .front {
+    transform: rotateY(180deg); /* Flip front face */
+  }
+
+  .card.flipped .back {
+    transform: rotateY(0deg); /* Show back face */
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+  }
+
+  /* Shadow effect on hover */
+  .card:hover img {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Responsive styles for small screens */
+  @media (max-width: 768px) {
+    .card {
+      width: 80px;
+      height: 80px;
+    }
+
+    .card img {
+      border-width: 2px;
+    }
+  }
+
+  /* Animation for matched cards */
+  .card.matched img {
+    border-color: #3fa7f0;
+    animation: matchedAnimation 0.5s ease-in-out;
+  }
+
+  @keyframes matchedAnimation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  .back {
+    transform: rotateY(180deg); /* Rotate back face */
+  }
+  .card {
+    width: 150px; /* Set width as needed */
+    height: 210px; /* Set a fixed height */
+    perspective: 1000px; /* For 3D effect */
+  }
+
+  .card .flipped {
+    transform: rotateY(180deg); /* Flip effect */
+  }
+
+  .back {
+    transform: rotateY(180deg); /* Rotate back face */
+  }
+}
+.card .back {
+  transition: all ease-in 0.2s;
+  transition-delay: 0.2s;
+}
+.flipped .back {
+  transform: rotateY(90deg);
+  transition-delay: 0s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+/* Efek bayangan saat hover */
+.card:hover img {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  .card {
+    width: 80px;
+    height: 80px;
+  }
+
+  .card img {
+    border-width: 2px;
+  }
+}
+/* Animasi ketika kartu cocok */
+.card.matched img {
+  border-color: #3fa7f0;
+  animation: matchedAnimation 0.5s ease-in-out;
+}
+@keyframes matchedAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

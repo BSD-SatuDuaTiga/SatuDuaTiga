@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SingleCard from "../components/SingleCard";
-
+import { useNavigate } from "react-router";
 const cardImg = [
   { src: "https://th.bing.com/th/id/OIP.V8oSrKn5WARwyuMvR5OpsAHaFj?w=222&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false },
   { src: "https://th.bing.com/th/id/OIP.zEKgsoxhkPDY-ktz_HPz_gHaE7?w=200&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false },
@@ -9,29 +9,26 @@ const cardImg = [
   { src: "https://th.bing.com/th/id/OIP.Pj47z3xwEoJBs861VT8cnwHaGN?w=218&h=182&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false },
   { src: "https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/10/28064854/12.-Tips-Merawat-Anak-Kucing-Munchkin.jpg", matched: false },
 ];
-
 export default function FlipCard() {
   const [cards, setCards] = useState([]);
   const [turns, setTurns] = useState(0);
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
+  const navigate = useNavigate();
 
   const suffleCards = () => {
     const suffleCards = [...cardImg, ...cardImg].sort(() => Math.random() - 0.5).map((card) => ({ ...card, id: Math.random() }));
     setCards(suffleCards);
     setTurns(0);
   };
-
   useEffect(() => {
     suffleCards();
   }, []);
-
   const handleChoice = (card) => {
     if (choiceOne && choiceTwo) return;
     if (card === choiceOne) return;
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   };
-
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       if (choiceOne.src === choiceTwo.src) {
@@ -50,7 +47,6 @@ export default function FlipCard() {
       }
     }
   }, [choiceOne, choiceTwo]);
-
   const resetTurn = () => {
     setChoiceOne(null);
     setChoiceTwo(null);
@@ -59,66 +55,19 @@ export default function FlipCard() {
 
   return (
     <div className="App">
-      <h1>✨ Memory Game ✨</h1>
-      <button className="Button" onClick={suffleCards}>
+      <h1 className="text-2xl">✨ Memory Game ✨</h1>
+      <button className="Button mt-2" onClick={suffleCards}>
         New Game
       </button>
-      <div className="card-grid">
+      <div className="card-grid mb-2">
         {cards.map((card) => (
-          <div key={card.id} className="flip-card-container">
-            <div className="flip-card">
-              <div className="flip-card-inner">
-                <div className="flip-card-front">
-                  <img src={card.src} alt="card" />
-                </div>
-                <div className="flip-card-back">
-                  <img src={card.src} alt="card" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <SingleCard key={card.id} card={card} handleChoice={handleChoice} flipped={card === choiceOne || card === choiceTwo || card.matched} />
         ))}
       </div>
-      <p>Turns: {turns}</p>
-      <style>
-        {`
-          .flip-card-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px;
-          }
-
-          .flip-card {
-            width: 150px;
-            height: 200px;
-            perspective: 1000px;
-          }
-
-          .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-          }
-
-          .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-          }
-
-          .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-          }
-
-          .flip-card-back {
-            transform: rotateY(180deg);
-          }
-        `}
-      </style>
+      <p className="text-lg text-bold">Turns: {turns}</p>
+      <button className="bg-gray-500 ml-3 px-5 mt-2 text-lg font-bold cursor-pointer hover:bg-gray-600 py-3 rounded-sm" onClick={() => navigate("/")}>
+        Back to Home
+      </button>
     </div>
   );
 }
