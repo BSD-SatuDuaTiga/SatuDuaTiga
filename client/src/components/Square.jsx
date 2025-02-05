@@ -25,21 +25,28 @@ const crossSvg = (
 export default function Square({ currentElement, playingAs, socket, setGameState, id, currentPlayer, setCurrentPlayer, finishedState, finishedArrayState }) {
   const [icon, setIcon] = useState(null);
 
+  // Fungsi untuk menangani klik pada kotak
   const clickOnSquare = () => {
+    // Jika pemain tidak sesuai, tidak ada aksi
     if (currentPlayer !== playingAs) {
       return;
     }
+
+    // Jika game sudah selesai, tidak ada aksi
     if (finishedState) {
       return;
     }
 
+    // Jika kotak belum memiliki ikon
     if (!icon) {
+      // Menentukan ikon berdasarkan pemain saat ini
       if (currentPlayer === "circle") {
         setIcon(circleSvg);
       } else {
         setIcon(crossSvg);
       }
 
+      // Mengirim pergerakan ke server
       const myCurrentPlayer = currentPlayer;
 
       socket.emit("playerMoveFromClient", {
@@ -49,8 +56,11 @@ export default function Square({ currentElement, playingAs, socket, setGameState
         },
       });
 
+      // Mengubah pemain saat ini
+
       setCurrentPlayer(currentPlayer === "circle" ? "cross" : "circle");
 
+      // Mengubah state game
       setGameState((prevState) => {
         let newState = [...prevState];
         const rowIndex = Math.floor(id / 3);
@@ -66,8 +76,8 @@ export default function Square({ currentElement, playingAs, socket, setGameState
     <>
       <div
         onClick={clickOnSquare}
-        className={`w-20 h-20 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
-          currentPlayer !== playingAs ? "cursor-not-allowed" : ""
+        className={`w-20 h-20 bg-blue-100  rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
+          currentPlayer !== playingAs ? "cursor-not-allowed" : "cursor-pointer"
         } ${finishedArrayState.includes(id) ? finishedState + "-won" : ""} ${finishedState && finishedState !== playingAs ? "bg-grey-400" : ""}`}
       >
         {currentElement === "circle" ? circleSvg : currentElement === "cross" ? crossSvg : icon}
