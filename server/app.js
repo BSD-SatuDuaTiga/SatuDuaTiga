@@ -69,6 +69,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  //chat
+  socket.on("message:new", (data) => {
+    io.emit("message:update", {
+      from: data.from,
+      message: data.message,
+    });
+  });
+
   socket.on("disconnect", () => {
     const currentUser = users[socket.id];
     currentUser.online = false;
