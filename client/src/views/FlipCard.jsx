@@ -7,7 +7,7 @@ const cardImg = [
   { "src": "https://th.bing.com/th/id/OIP.ZRc10AvHUe5F8XsMzS2d5gHaF7?w=216&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false},
   { "src": "https://th.bing.com/th/id/OIP.bdJcUnORzC1bPZc0MmKBfQHaEK?w=280&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false},
   { "src": "https://th.bing.com/th/id/OIP.Pj47z3xwEoJBs861VT8cnwHaGN?w=218&h=182&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false},
-  { "src": "https://th.bing.com/th/id/OIP.V8oSrKn5WARwyuMvR5OpsAHaFj?w=222&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false}
+  { "src": "https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/10/28064854/12.-Tips-Merawat-Anak-Kucing-Munchkin.jpg", matched: false}
 ];
 
 export default function FlipCard() {
