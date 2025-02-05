@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+import "../styles/singleCard.css";
+
 export default function SingleCard({ card, handleChoice, flipped }) {
   const handleClick = () => {
     handleChoice(card);
