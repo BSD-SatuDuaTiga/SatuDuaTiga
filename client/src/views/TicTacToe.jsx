@@ -129,13 +129,12 @@ export default function TicTacToe() {
 
   // Effect untuk menangani keluar dari game
   socket?.on("opponentLeftMatch", () => {
-    Swal.fire({ title: "You Won Opponent Left Match" });
-    // .then((result) => {
-    //   setFinishedState("opponentLeftMatch");
-    //   if (result.isConfirmed) {
-    //     navigate("/");
-    //   }
-    // });
+    Swal.fire({ title: "You Won Opponent Left Match" }).then((result) => {
+      setFinishedState("opponentLeftMatch");
+      if (result.isConfirmed) {
+        navigate("/");
+      }
+    });
   });
 
   // untuk menangani pergerakan dari server
@@ -187,7 +186,7 @@ export default function TicTacToe() {
     setPlayerName(username);
 
     // Membuat socket baru
-    const newSocket = io("http://localhost:3000", {
+    const newSocket = io("https://api.robbysuganda.tech", {
       autoConnect: true,
     });
 
@@ -310,7 +309,7 @@ export default function TicTacToe() {
             {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
           </div>
           <div className="flex justify-center mt-3">
-            {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && (
+            {finishedState && finishedState !== "opponentLeftMatch" && (
               <button onClick={handlePlayAgain} className="bg-green-500 text-md font-bold cursor-pointer hover:bg-green-600 rounded-sm">
                 Play Again
               </button>

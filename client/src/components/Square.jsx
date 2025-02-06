@@ -27,6 +27,11 @@ export default function Square({ currentElement, playingAs, socket, setGameState
 
   // Fungsi untuk menangani klik pada kotak
   const clickOnSquare = () => {
+    //   mengecek apakah kotak sudah terisi
+    if (currentElement === "circle" || currentElement === "cross") {
+      return;
+    }
+
     // Jika pemain tidak sesuai, tidak ada aksi
     if (currentPlayer !== playingAs) {
       return;
@@ -76,9 +81,9 @@ export default function Square({ currentElement, playingAs, socket, setGameState
     <>
       <div
         onClick={clickOnSquare}
-        className={`w-20 h-20 bg-blue-100  rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${finishedState ? "cursor-not-allowed" : ""} ${
-          currentPlayer !== playingAs ? "cursor-not-allowed" : "cursor-pointer"
-        } ${finishedArrayState.includes(id) ? finishedState + "-won" : ""} ${finishedState && finishedState !== playingAs ? "bg-grey-400" : ""}`}
+        className={`w-20 h-20 bg-blue-100  rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center text-3xl font-bold shadow-sm ${
+          finishedState || currentElement === "circle" || currentElement === "cross" ? "cursor-not-allowed" : ""
+        } ${currentPlayer !== playingAs ? "cursor-not-allowed" : "cursor-pointer"} ${finishedArrayState.includes(id) ? finishedState + "-won" : ""} ${finishedState && finishedState !== playingAs ? "bg-grey-400" : ""}`}
       >
         {currentElement === "circle" ? circleSvg : currentElement === "cross" ? crossSvg : icon}
       </div>
