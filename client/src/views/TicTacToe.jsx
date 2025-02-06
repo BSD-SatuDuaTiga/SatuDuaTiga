@@ -200,9 +200,9 @@ export default function TicTacToe() {
     setSocket(newSocket);
   }
 
-  // async function handlePlayAgain() {
-  //   setPlayOnline(false);
-  // }
+  async function handlePlayAgain() {
+    setPlayOnline(false);
+  }
 
   // Jika tidak bermain online
   if (!playOnline) {
@@ -265,7 +265,7 @@ export default function TicTacToe() {
           {/* Turn Indicator */}
           <div className="text-center mb-4">
             {(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? (
-              <div className="text-green-400 text-lg font-semibold">Your Turn ({playerName})</div>
+              <div className="text-green-400 text-lg font-semibold">Your Turn ( {playerName} )</div>
             ) : (
               <div className="text-green-400 text-lg font-semibold">{opponentName} Turn's</div>
             )}
@@ -305,13 +305,13 @@ export default function TicTacToe() {
             {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-200">Playing against {opponentName}</div>}
             {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
           </div>
-          {/* <div className="flex justify-center mt-3">
+          <div className="flex justify-center mt-3">
             {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && (
               <button onClick={handlePlayAgain} className="bg-green-500 text-md font-bold cursor-pointer hover:bg-green-600 rounded-sm">
                 Play Again
               </button>
             )}
-          </div> */}
+          </div>
         </div>
 
         <Chat messages={messages} playerName={playerName} handleSubmit={handleSubmit} messageSent={messageSent} setMessageSent={setMessageSent} />

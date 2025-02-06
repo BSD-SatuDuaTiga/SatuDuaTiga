@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SingleCard from "../components/SingleCard";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 const cardImg = [
   { src: "https://th.bing.com/th/id/OIP.V8oSrKn5WARwyuMvR5OpsAHaFj?w=222&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false },
   { src: "https://th.bing.com/th/id/OIP.zEKgsoxhkPDY-ktz_HPz_gHaE7?w=200&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7", matched: false },
@@ -33,13 +34,31 @@ export default function FlipCard() {
     if (choiceOne && choiceTwo) {
       if (choiceOne.src === choiceTwo.src) {
         setCards((prevCards) => {
-          return prevCards.map((card) => {
+          const updatedCards = prevCards.map((card) => {
             if (card.src === choiceOne.src) {
               return { ...card, matched: true };
             } else {
               return card;
             }
           });
+
+          // Cek apakah semua kartu sudah terbuka
+          const allMatched = updatedCards.every((card) => card.matched);
+          if (allMatched) {
+            Swal.fire({
+              title: "Selamat!",
+              text: `Anda telah menyelesaikan permainan dalam ${turns + 1} giliran!`,
+              icon: "success",
+              confirmButtonText: "Main Lagi",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                suffleCards();
+              }
+            });
+          }
+
+          return updatedCards;
         });
         resetTurn();
       } else {
