@@ -264,10 +264,14 @@ export default function TicTacToe() {
 
           {/* Turn Indicator */}
           <div className="text-center mb-4">
-            {(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? (
-              <div className="text-green-400 text-lg font-semibold">Your Turn ( {playerName} )</div>
-            ) : (
-              <div className="text-green-400 text-lg font-semibold">{opponentName} Turn's</div>
+            {!finishedState && (
+              <>
+                {(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? (
+                  <div className="text-green-400 text-lg font-semibold">Your Turn ( {playerName} )</div>
+                ) : (
+                  <div className="text-green-400 text-lg font-semibold">{opponentName} Turn's</div>
+                )}
+              </>
             )}
           </div>
 
