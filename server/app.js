@@ -26,6 +26,7 @@ io.on("connection", (socket) => {
   users[socket.id] = {
     socket: socket,
     online: true,
+    playing: false,
   };
 
   // Menangani permintaan bermain
@@ -44,7 +45,11 @@ io.on("connection", (socket) => {
     }
 
     if (opponentPlayer) {
-      // Jika lawan ditemukan, buat ruangan baru
+      // Set status playing kedua pemain menjadi true
+      currentUser.playing = true;
+      opponentPlayer.playing = true;
+
+      // Buat ruangan baru
       allRoms.push({
         player1: opponentPlayer,
         player2: currentUser,
@@ -90,10 +95,12 @@ io.on("connection", (socket) => {
   // Menangani disconnect
   socket.on("disconnect", () => {
     const currentUser = users[socket.id];
+    if (!currentUser) return;
+
     currentUser.online = false;
     currentUser.playing = false;
 
-    // Memberitahu lawan jika pemain keluar
+    // Mencari dan membersihkan room yang ditinggalkan
     for (let index = 0; index < allRoms.length; index++) {
       const { player1, player2 } = allRoms[index];
 
