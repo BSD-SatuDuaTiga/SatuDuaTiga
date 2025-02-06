@@ -129,12 +129,13 @@ export default function TicTacToe() {
 
   // Effect untuk menangani keluar dari game
   socket?.on("opponentLeftMatch", () => {
-    Swal.fire({ title: "You Won Opponent Left Match" }).then((result) => {
-      setFinishedState("opponentLeftMatch");
-      if (result.isConfirmed) {
-        navigate("/");
-      }
-    });
+    Swal.fire({ title: "You Won Opponent Left Match" });
+    // .then((result) => {
+    //   setFinishedState("opponentLeftMatch");
+    //   if (result.isConfirmed) {
+    //     navigate("/");
+    //   }
+    // });
   });
 
   // untuk menangani pergerakan dari server
@@ -238,19 +239,36 @@ export default function TicTacToe() {
         <div className="game-board">
           {/* Game Header */}
           <div className="flex justify-between items-center mb-8">
-            <div
-              className={`player-indicator ${playingAs === "circle" ? "bg-blue-600" : "bg-blue-400"} ${(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? "player-active" : ""}`}
-            >
-              {playerName}
-              {playingAs === "circle" && <span className="ml-2 font-bold">(O)</span>}
-              {playingAs === "cross" && <span className="ml-2 font-bold">(X)</span>}
+            <div className="text-center">
+              <div
+                className={`player-indicator ${playingAs === "circle" ? "bg-blue-600" : "bg-blue-400"} ${
+                  (playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? "player-active" : ""
+                }`}
+              >
+                {playerName}
+                {playingAs === "circle" && <span className="ml-2 font-bold">(O)</span>}
+                {playingAs === "cross" && <span className="ml-2 font-bold">(X)</span>}
+              </div>
             </div>
 
-            <div className={`player-indicator ${playingAs === "cross" ? "bg-red-600" : "bg-red-400"} ${(playingAs !== "circle" && currentPlayer === "circle") || (playingAs !== "cross" && currentPlayer === "cross") ? "player-active" : ""}`}>
-              {opponentName}
-              {playingAs !== "circle" && <span className="ml-2 font-bold">(O)</span>}
-              {playingAs !== "cross" && <span className="ml-2 font-bold">(X)</span>}
+            <div className="text-center">
+              <div
+                className={`player-indicator ${playingAs === "cross" ? "bg-red-600" : "bg-red-400"} ${(playingAs !== "circle" && currentPlayer === "circle") || (playingAs !== "cross" && currentPlayer === "cross") ? "player-active" : ""}`}
+              >
+                {opponentName}
+                {playingAs !== "circle" && <span className="ml-2 font-bold">(O)</span>}
+                {playingAs !== "cross" && <span className="ml-2 font-bold">(X)</span>}
+              </div>
             </div>
+          </div>
+
+          {/* Turn Indicator */}
+          <div className="text-center mb-4">
+            {(playingAs === "circle" && currentPlayer === "circle") || (playingAs === "cross" && currentPlayer === "cross") ? (
+              <div className="text-green-400 text-lg font-semibold">Your Turn ({playerName})</div>
+            ) : (
+              <div className="text-green-400 text-lg font-semibold">{opponentName} Turn's</div>
+            )}
           </div>
 
           {/* Game Grid */}
