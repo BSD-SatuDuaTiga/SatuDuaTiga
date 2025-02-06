@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className={`min-h-screen flex flex-col transition-colors duration-300 ${theme === "dark" ? "bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900" : "bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100"}`}>
       {/* Navbar */}
       <nav className={`${theme === "dark" ? "bg-black/30 text-white" : "bg-white/30 text-gray-800"} backdrop-blur-sm p-6 w-full fixed top-0 flex justify-between items-center shadow-lg z-50`}>
-        <div className="flex justify-center items-center space-x-12 max-w-4xl w-full px-4">
+        <div className="flex items-center space-x-12 max-w-4xl w-full px-4">
           <h1
             className={`text-3xl font-extrabold tracking-wider ${
               theme === "dark" ? "bg-gradient-to-r from-yellow-200 to-yellow-500" : "bg-gradient-to-r from-purple-600 to-pink-600"

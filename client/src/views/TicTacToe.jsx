@@ -199,6 +199,10 @@ export default function TicTacToe() {
     setSocket(newSocket);
   }
 
+  // async function handlePlayAgain() {
+  //   setPlayOnline(false);
+  // }
+
   // Jika tidak bermain online
   if (!playOnline) {
     return (
@@ -278,10 +282,18 @@ export default function TicTacToe() {
           {/* Game Status */}
           <div className="status-container">
             {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && <div className="text-lg font-semibold text-green-700">{finishedState === playingAs ? "You" : opponentName} won the game</div>}
+
             {finishedState && finishedState === "draw" && <div className="text-lg font-semibold text-green-700">Its a Draw</div>}
             {!finishedState && opponentName && <div className="text-lg font-semibold text-gray-200">Playing against {opponentName}</div>}
             {finishedState && finishedState === "opponentLeftMatch" && <div className="text-lg font-semibold text-gray-700">You won opponent left the match</div>}
           </div>
+          {/* <div className="flex justify-center mt-3">
+            {finishedState && finishedState !== "opponentLeftMatch" && finishedState !== "draw" && (
+              <button onClick={handlePlayAgain} className="bg-green-500 text-md font-bold cursor-pointer hover:bg-green-600 rounded-sm">
+                Play Again
+              </button>
+            )}
+          </div> */}
         </div>
 
         <Chat messages={messages} playerName={playerName} handleSubmit={handleSubmit} messageSent={messageSent} setMessageSent={setMessageSent} />
