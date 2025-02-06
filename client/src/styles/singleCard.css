@@ -2,6 +2,7 @@
   width: 100%; /* Set width as needed */
   height: 210px; /* Set a fixed height */
   perspective: 1000px; /* For 3D effect */
+  cursor: pointer;
 }
 .card img {
   width: 100%;
@@ -24,6 +25,7 @@
     width: 100%; /* Set width as needed */
     height: 210px; /* Set a fixed height */
     perspective: 1000px; /* For 3D effect */
+    cursor: pointer;
   }
   .front,
   .back {
@@ -37,6 +39,7 @@
     height: 210px; /* Set a fixed height */
     perspective: 1000px; /* For 3D effect */
     position: relative; /* Required for absolute positioning of children */
+    cursor: pointer;
   }
 
   .card img {
