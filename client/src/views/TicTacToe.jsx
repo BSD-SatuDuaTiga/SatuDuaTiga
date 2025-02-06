@@ -187,7 +187,7 @@ export default function TicTacToe() {
     setPlayerName(username);
 
     // Membuat socket baru
-    const newSocket = io("http://localhost:3000", {
+    const newSocket = io("https://api.robbysuganda.tech", {
       autoConnect: true,
     });
 
